@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<br class="mt-0 mb-4">
+<div class="container">
+    <h4>New YTT</h4>
+    <p><i>Note: The Ingredients and Directions fields are Markdown Supported.
+        Learn more about markdown <a
+                href="https://www.markdownguide.org/cheat-sheet/"
+                style="text-decoration: none;" target="_blank">here</a>.</i>
+    </p>
+    <br>
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                <div class="col">
+                    {{ form.link|as_crispy_field }}
+                    {% comment %}
+                    {{ form.picture|as_crispy_field }}
+                    {% endcomment %}
+                    {{ form.gift_name|as_crispy_field }}
+
+                </div>
+            </div>
+            {% comment %}
+            <div class="col-6">
+                {{ form.username|as_crispy_field }}
+            </div>
+            {% endcomment %}
+
+        </div>
+        <br>
+
+
+
+
+
+
+
+        <div class="mt-4 mb-4 d-flex justify-content-center">
+            <button class="btn btn-success" type="submit">Post Recipe</button>
+        </div>
+    </form>
+    {{ form.media }}
+</div>
+
+{% endblock %}   

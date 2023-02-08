@@ -1,0 +1,26 @@
+<!-- users/signup.html -->
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<br class="mt-0 mb-4">
+<div class="container">
+    <div class="global-container">
+        <div class="card login-form">
+            <div class="card-body">
+                <h3 class="card-title text-center">Signup for Foodanic</h3>
+                <div class="card-text">
+                    <form method="POST">{% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+
+                        <div class="sign-up">
+                            Already have an account? <a href="{% url 'login' %}" style="text-decoration:none;">Sign In</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'users/style.html' %}
+{% endblock %}
