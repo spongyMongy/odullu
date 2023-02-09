@@ -4,18 +4,27 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'home' %}">Foodanic</a>
+            {% if request.user.is_authenticated %}
+          <a class="navbar-brand" href="{% url 'home' %}">Welcome to
+              member section {{request.user}}</a>
+                        {% else %}
+          <a class="navbar-brand" href="{% url 'home' %}">Login to add your
+          giveaway link</a>
+            {% endif %}
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% comment %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><button class="btn btn-warning" style="color: white;">All Recipes</button></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="{% url 'create' %}"><button class="btn btn-info" style="color: white;">New Recipe</button></a>
               </li>
+                {% endcomment %}
+
             </ul>
             {% if not request.user.is_authenticated %}
                 <a class="nav-link active" aria-current="page" href="{% url 'login' %}"><button class="btn btn-dark" style="color: white;">Login</button></a>
@@ -26,11 +35,23 @@
         </div>
       </nav>
 
+
+
+
   <div class="container">
     <header class="jumbotron my-4">
-      <h1 class="display-3">A Warm Welcome!</h1>
-      <p class="lead">Browse through our collection of various recipes.</p>
-      <a href="{% url 'create' %}"><button class="btn btn-info btn-lg" style="color: white;">Post Your Recipe</button></a>
+      <h1 class="display-3">.:YouTube Giveaway Center:. <IMG
+              src="media/yt_icon.png"></h1>
+
+
+
+
+      <p class="lead">Check amazing giveaway chances added by registered YT
+          users..</p>
+      <a href="{% url 'create' %}"><button class="btn btn-info btn-lg"
+                                           style="color: white;">Add your
+          Giveaway link..
+      </button></a>
     </header>
     <br>
 
@@ -85,67 +106,16 @@
 
 
 
-    {% for giveaway in giveaways %}
-
-
- <a href="{% url 'detail' giveaway.id %}">
-     {% comment %}
- <img class="card-img-top" src="{{giveaway.picture.url}}"
-      {% endcomment %}
-
-                    alt="{{giveaway.gift_name}}"></a>
-                         <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <br>
-                                    <table style="width:250px;">
-
-
-                                        {% comment %}
-
-                                        <tr>
-                                            <th>time:</th>
-                                            <td>{{ giveaway.time }}</td>
-                                        </tr>
-                                                                                <tr>
-                                            <th>link:</th>
-                                            <td>{{ giveaway.link }}</td>
-                                        </tr>
-                                                                                <tr>
-                                            <th>picture:</th>
-                                            <td>{{ giveaway.picture.url }}</td>
-                                        </tr>
-                                        {% endcomment %}
-                                        <tr>
-                                            <th>user:</th>
-                                            <td>{{ request.user }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Giftname:</th>
-                                            <td>{{ giveaway.gift_name }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
 
 
 
 
-
-            </p>
-            </p>
-          </div>
-          <div class="card-footer">
-            <a href="{% url 'detail' giveaway.id %}" class="btn btn-primary">View</a>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
-  </div>
 
   <br><br><br>
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Foodanic 2021</p>
+      <p class="m-0 text-center text-white">Copyright &copy; YTGiawy 2023</p>
     </div>
   </footer>
 {% endblock %}
+  </div>

@@ -1,3 +1,6 @@
+from typing import Union
+
+import requests
 from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 
@@ -34,6 +37,22 @@ def detail(request, id):
     return render(request, 'auto_scraping/detail.html', {'giveaway': giveaway})
 
 
+def validate_link(url: str) -> Union[dict, bool]:
+    # url = url.split('&')[0]
+    thumbnail_url = f'https://img.youtube.com/vi/{url}/default.jpg'
+    thumbnail_url = f'https://img.youtube.com/vi/{url}/default.jpg'
+    if 'www.youtube.com/watch?v=' in url:
+        url = url.split('&')[0]
+        thumbnail_url = url.split('v=')[1]
+        thumbnail_url = f'https://img.youtube.com/vi/{thumbnail_url}/default.jpg'
+        return False if requests.get(thumbnail_url).status_code != 200 else {\
+            'url':url,\
+            'thumbnail_url':thumbnail_url, 'link_valid':True}  #
+    return False
+
+
+
+
 @login_required
 def create(request):
     context = {}
@@ -44,13 +63,16 @@ def create(request):
         return render(request, 'auto_scraping/create.html', context)
     elif request.method == 'POST':
         form = GiftModelUserForm(request.POST)
-        if 'https://www.youtube.com/' or 'http://www.youtube.com/' not in form[\
-                'link'].value():
+        print('8888888888',validate_link(form['link'].value()))
+        link_check_result = validate_link(form['link'].value())
+        if link_check_result is False:
             messages.error(request, 'Please enter a valid youtube link')
-
+            print('6666666666666')
             form = GiftModelUserForm()
             context = {}
-            context['form'] = GiftModelUserForm()
+            context['form'] = GiftModelUserForm(request.POST)
+            storage = messages.get_messages(request)
+            storage.used = True
             return render(request, 'auto_scraping/create.html', context)
 
 
@@ -61,10 +83,12 @@ def create(request):
 
             form = GiftModelUserForm()
             context = {}
-            context['form'] = GiftModelUserForm()
+            context['form'] = GiftModelUserForm(request.POST)
             return render(request, 'auto_scraping/create.html', context)
         else:
             if form.is_valid():
+                print('aaaaaaaaaaaaaaaaaa ', link_check_result)
+                url, thumbnail_url, link_valid = link_check_result
                 url = form['link'].value().split('v=')[1]
                 thumbnail_url = f'https://img.youtube.com/vi/{url}/default.jpg'
                 new = GiftModelUserEntry()
