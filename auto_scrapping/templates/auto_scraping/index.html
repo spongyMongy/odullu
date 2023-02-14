@@ -56,7 +56,6 @@
     <br>
 
                   {% comment %}
-
     <div class="row text-center">
     {% for giveaway in giveaways %}
       <div class="col-lg-4 col-md-6 mb-4">
@@ -74,10 +73,24 @@
             {% endcomment %}
 
 
+<br>
+              <br>
+
+              {% for auto_giveaway in auto_giveaways %}
+                        {{auto_giveaway.gift_name}}
+                                        {{auto_giveaway.link}}
+
+                            {% endfor  %}
+
+
 
 <table class="table table-bordered">
+              <span><strong><center><h3>BEST GIVEAWAYS FROM REGISTERED
+                  USERS</h3></center></strong></span>
+                            <br>
 
                                  <thead>
+
                         <tr>
                             <th>Gift</th>
                             <th>Added on</th>
@@ -93,10 +106,10 @@
     <TD class="c2">{{giveaway.gift_name}}</TD>
            <TD class="c3">{{giveaway.time}}</TD>
 
-    <TD class="c5"><SPAN>{{giveaway.link}}</SPAN></TD>
+            <td><a href="{{giveaway.link}}">{{giveaway.link}}</a></td>
 
 
-       <TD class="c3">{{request.user}}</TD>
+       <TD class="c3">{{giveaway.username}}</TD>
    <TD class="img-div"><IMG src="{{giveaway.thumbnail_link}}"></TD>
 
   {% comment %} <TD class="c1"><IMG src="{{giveaway.picture.url}}"></TD>{% endcomment %}

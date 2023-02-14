@@ -21,10 +21,63 @@ def home(request):
     # context = {
     #     'giveaway': giveaways,
     # }
-    return render(request, 'auto_scraping/index.html', {'giveaways':giveaways})
+    auto_giveaways = automatic_scrape(5)
+    print('77777ere77777 ', auto_giveaways)
+    return render(request, 'auto_scraping/index.html', {'giveaways':giveaways,
+                                                        'auto_giveaways':auto_giveaways})
+
+
+def create_number_of_initial_autoscrapping_items():
+    pass
+
+
+def automatic_scrape(number_of_items: int = 5):
+    auto_giveaways = GiftModelAutoScraping.objects.all()
+    # context = {'auto_giveaways': auto_giveaways}
+
+
+    api_key = 'AIzaSyCAeJSWUnOjrYg64Baa96mx7xlHeOKSkaY'
+    from datetime import datetime, timezone, timedelta
+    from apiclient.discovery import build
+    youtube = build('youtube', 'v3', developerKey=api_key)
+    published_after_date = (datetime.now(timezone.utc) - timedelta(
+        days=6)).isoformat().replace("+00:00", "Z")
+    request = youtube.search().list(q='Giveaway', part='snippet', type='video',
+                                    publishedAfter=published_after_date,
+                                    order='viewCount',
+                                    regionCode='US',
+                                    )
+    res = request.execute()
+    from pprint import PrettyPrinter
+    pp = PrettyPrinter()
+    pp.pprint(res)
+
+    auto_scraping_object = GiftModelAutoScraping.objects.all()
+    # auto_scraping_object = get_object_or_404(GiftModelAutoScraping, id=1)
+
+    print('999999999999999999 ', auto_scraping_object)
+    create_number_of_initial_autoscrapping_items()
+    for count, video in enumerate(res.get('items')):
+        print('zzzzzzzzzzzzzzz ', video.get('id').get('videoId'))
+        auto_scraping_object, created = GiftModelAutoScraping.objects.get_or_create(
+            id=count)
+        print('7777777777 ', auto_scraping_object, '000000000000000 ', created)
+        # auto_scraping_object = GiftModelAutoScraping.objects.all()
+
+        auto_scraping_object.gift_name = video.get('snippet').get('title')
+        auto_scraping_object.thumbnail_link = video.get('snippet').get('thumbnails').get('default').get('url')
+        auto_scraping_object.time = video.get('snippet').get('publishedAt')
+        auto_scraping_object.link = 'https://www.youtube.com/watch?v='\
+                                    +video.get('id').get('videoId')
+        auto_scraping_object.save()
+
+    return auto_giveaways
 
 
 
+
+def scheduled_update_for_auto_scraping():
+    pass
 
 def detail(request, id):
     giveaway = get_object_or_404(GiftModelUserEntry, id=id)

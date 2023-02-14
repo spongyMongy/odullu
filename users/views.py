@@ -5,8 +5,11 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, Auth
 def signup(request):
     context = {}
     if request.method == 'POST':
+        print('898989898989')
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            print('0000000000')
+
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
