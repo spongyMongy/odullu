@@ -50,6 +50,7 @@ def automatic_scrape(number_of_items: int = 5):
     res = request.execute()
     from pprint import PrettyPrinter
     pp = PrettyPrinter()
+
     pp.pprint(res)
 
     auto_scraping_object = GiftModelAutoScraping.objects.all()
